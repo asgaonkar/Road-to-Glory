@@ -190,3 +190,13 @@ p.stats {
   #myBtn1:hover {
 	background-color: #555;
   }
+  .blinking{
+	animation:blinkingText 0.7s infinite;
+}
+@keyframes blinkingText{
+	0%{		color: #FFF;	}
+	49%{	color: #444;	}
+	50%{	color: #888;	}
+	99%{	color: #444;	}
+	100%{	color: #FFF;	}
+}
