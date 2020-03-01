@@ -112,7 +112,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="information" style="display: none;">
+            <div id="information" style="display: block;">
               <p>From Quarter-Finals to Finals</p>
               <div class="alert alert-success">
                 <strong>Features:</strong>
@@ -141,31 +141,35 @@
                 </ul>
               </div>
             </div>
-            <div class="analysis" style="display: block;">
-              <p>From Quarter-Finals to Finals</p>
+            <div id="analysis" style="display: none;">
+              <p>The <strong>Most Agressive</strong> players (Quarter-Finals to Finals)</p>
               <div class="alert alert-success">
-                The <strong>Most Agressive</strong> players
-                <br />
                 <ul>
                   <li>2004: Roger Federer</li>
-                  <li>2005: ***</li>
+                  <li>2005: Roger Federer</li>
                   <li>2006: Roger Federer</li>
                   <li>2007: Roger Federer</li>
                   <li>2008: Jo-Wilfried Tsonga</li>
                   <li>2009: Roger Federer</li>
                   <li>2010: Roger Federer</li>
-                  <li>2011: Roger Federer</li>
-                  <li>2012: Roger Federer</li>
-                  <li>2013: Roger Federer</li>
-                  <li>2014: Roger Federer</li>
+                  <li>2011: Andy Murray</li>
+                  <li>2012: Novak Djokovic</li>
+                  <li>2013: Novak Djokovic</li>
+                  <li>2014: Stanislas Wawrinka</li>
                 </ul>
+              </div>
+              <div class="alert alert-info">
+                <strong>Agressive: </strong>An aggressive player is one who is willing to put pressure on an opponent on every shot, 
+               hence have higher mistakes compared to their opponents, while still outperforming them.
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button
+              onclick="disp_modal_data()"
               type="button"
               class="btn btn-secondary"
+              id="more_info"
               style="background-color: #FFBF00; border-color: #FFD300;"
             >
               Analysis&nbsp;<span class="fa fa-line-chart"></span>
@@ -1005,12 +1009,24 @@
 
       $(function() {
         $("#btnTrigger").click();
-        $("body").scroll(function() {
-          //scrollTop refers to the top of the scroll position, which will be scrollHeight - offsetHeight
-
-          console.log("Top of the bottom reached!", this.scrollHeight);
-        });
       });
+
+
+      function disp_modal_data()
+      {
+        var check = document.getElementById('more_info');
+        if(check.innerHTML.includes('Analysis'))
+        {
+          check.innerHTML = 'Instructions&nbsp;<span class="fa fa-info-circle"></span>';
+          document.getElementById('analysis').style.display = 'block';
+          document.getElementById('information').style.display = 'none';
+        }
+        else{
+          check.innerHTML = 'Analysis&nbsp;<span class="fa fa-line-chart"></span>'
+          document.getElementById('analysis').style.display = 'none';
+          document.getElementById('information').style.display = 'block';
+        }
+      }
 
       //Get the button
       var mybutton = document.getElementById("myBtn");
