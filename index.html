@@ -55,10 +55,10 @@
     </script>
   </head>
   <body>
-    <div onclick="$('#btnTrigger').click();" id="myBtn1" title="Go Down">
+    <div onclick="$('#btnTrigger').click();" id="myBtn1" title="Instruction">
       <a
         class="fa fa-info-circle fa-x"
-        href="javascript:void(0)"
+        href="#"
         onclick="$('#btnTrigger').click();"
         style="color: white;"
       ></a>
@@ -69,8 +69,9 @@
       title="Go Down"
     >
       <a
-        class="fa fa-arrow-down fa-x"
-        href="javascript:void(0)"
+        class="fa fa-arrow-down fa-x blinking"
+        href="#"
+        id="downBtn"
         onclick="window.scrollTo(0,document.body.scrollHeight);"
         style="color: white;"
       ></a>
@@ -142,7 +143,10 @@
               </div>
             </div>
             <div id="analysis" style="display: none;">
-              <p>The <strong>Most Agressive</strong> players (Quarter-Finals to Finals)</p>
+              <p>
+                The <strong>Most Agressive</strong> players (Quarter-Finals to
+                Finals)
+              </p>
               <div class="alert alert-success">
                 <ul>
                   <li>2004: Roger Federer</li>
@@ -159,8 +163,10 @@
                 </ul>
               </div>
               <div class="alert alert-info">
-                <strong>Agressive: </strong>An aggressive player is one who is willing to put pressure on an opponent on every shot, 
-               hence have higher mistakes compared to their opponents, while still outperforming them.
+                <strong>Agressive: </strong>An aggressive player is one who is
+                willing to put pressure on an opponent on every shot, hence have
+                higher mistakes compared to their opponents, while still
+                outperforming them.
               </div>
             </div>
           </div>
@@ -326,93 +332,83 @@
                     curr_val = document.getElementById("value-time").innerHTML;
 
                     curr_data = data_full[curr_val - 2004];
-            
-
-
                   }
                   document.getElementById("round").innerHTML =
-                      curr_data[0]["round"];
-                    document.getElementById("result").innerHTML =
-                      curr_data[0]["results"];
-                    document.getElementById("player1").innerHTML =
-                      curr_data[0]["player1"];
-                    document.getElementById("player2").innerHTML =
-                      curr_data[0]["player2"];
-                    document.getElementsByClassName(0)[0].innerHTML =
-                      curr_data[0]["player1"] +
-                      '<br><span style="font-weight: normal;">' +
-                      curr_data[0]["round"] +
-                      "<br>Winner</span>";
+                    curr_data[0]["round"];
+                  document.getElementById("result").innerHTML =
+                    curr_data[0]["results"];
+                  document.getElementById("player1").innerHTML =
+                    curr_data[0]["player1"];
+                  document.getElementById("player2").innerHTML =
+                    curr_data[0]["player2"];
+                  document.getElementsByClassName(0)[0].innerHTML =
+                    curr_data[0]["player1"] +
+                    '<br><span style="font-weight: normal;">' +
+                    curr_data[0]["round"] +
+                    "<br>Winner</span>";
 
-                    for (var k = 0; k < curr_data.length; k++) {
-                      if (2 * k + 2 > 6) {
-                        document.getElementsByClassName(
-                          2 * k + 1
-                        )[0].innerHTML = curr_data[k]["player1"];
-                        document.getElementsByClassName(
-                          2 * k + 2
-                        )[0].innerHTML = curr_data[k]["player2"];
-                      } else {
-                        document.getElementsByClassName(
-                          2 * k + 1
-                        )[0].innerHTML =
-                          curr_data[k]["player1"] +
-                          '<br><span style="font-weight: normal; font-size: 13px">' +
-                          curr_data[2 * k + 1]["round"] +
-                          "-Final Winner </span>";
-                        document.getElementsByClassName(
-                          2 * k + 2
-                        )[0].innerHTML =
-                          curr_data[k]["player2"] +
-                          '<br><span style="font-weight: normal; font-size: 13px">' +
-                          curr_data[2 * k + 2]["round"] +
-                          "-Final Winner </span>";
-                      }
-                    }
-                    // console.log(document.getElementById(curr_stat1).style);
-                    var x = document.getElementsByClassName("stats");
-
-                    for (var i = 0; i < x.length; i++) {
-                      x[i].style.opacity = 0.3;
-                    }
-
-                    document.getElementById(curr_stat1).style.opacity = 1;
-                    document.getElementById(curr_stat2).style.opacity = 1;
-                    if (curr_stat1.includes("Serve")) {
-                      // console.log('Serve');
-                      document.getElementById("left_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat1] + " km/hr";
-                      document.getElementById("right_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat2] + " km/hr";
+                  for (var k = 0; k < curr_data.length; k++) {
+                    if (2 * k + 2 > 6) {
+                      document.getElementsByClassName(2 * k + 1)[0].innerHTML =
+                        curr_data[k]["player1"];
+                      document.getElementsByClassName(2 * k + 2)[0].innerHTML =
+                        curr_data[k]["player2"];
                     } else {
-                      document.getElementById("left_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat1];
-                      document.getElementById("right_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat2];
+                      document.getElementsByClassName(2 * k + 1)[0].innerHTML =
+                        curr_data[k]["player1"] +
+                        '<br><span style="font-weight: normal; font-size: 13px">' +
+                        curr_data[2 * k + 1]["round"] +
+                        "-Final Winner </span>";
+                      document.getElementsByClassName(2 * k + 2)[0].innerHTML =
+                        curr_data[k]["player2"] +
+                        '<br><span style="font-weight: normal; font-size: 13px">' +
+                        curr_data[2 * k + 2]["round"] +
+                        "-Final Winner </span>";
                     }
+                  }
+                  // console.log(document.getElementById(curr_stat1).style);
+                  var x = document.getElementsByClassName("stats");
 
-                    var oh = curr_data[0]["results"].split(" ");
-                    // console.log(oh);
-                    document.getElementById("result").innerHTML = "| ";
-                    for (var i = 0; i < oh.length; i++) {
-                      if (
-                        parseInt(oh[i].split("-")[0]) >
-                        parseInt(oh[i].split("-")[1])
-                      ) {
-                        // console.log("Player 1");
-                        document.getElementById("result").innerHTML +=
-                          '<span style="color:#00b100;">' +
-                          oh[i] +
-                          " </span><span>| </span>";
-                      } else {
-                        // console.log("Player 2");
-                        document.getElementById("result").innerHTML +=
-                          '<span style="color:#DC143C;">' +
-                          oh[i] +
-                          " </span><span>| </span>";
-                      }
+                  for (var i = 0; i < x.length; i++) {
+                    x[i].style.opacity = 0.3;
+                  }
+
+                  document.getElementById(curr_stat1).style.opacity = 1;
+                  document.getElementById(curr_stat2).style.opacity = 1;
+                  if (curr_stat1.includes("Serve")) {
+                    // console.log('Serve');
+                    document.getElementById("left_val_stat").innerHTML =
+                      curr_data[match_number][curr_stat1] + " km/hr";
+                    document.getElementById("right_val_stat").innerHTML =
+                      curr_data[match_number][curr_stat2] + " km/hr";
+                  } else {
+                    document.getElementById("left_val_stat").innerHTML =
+                      curr_data[match_number][curr_stat1];
+                    document.getElementById("right_val_stat").innerHTML =
+                      curr_data[match_number][curr_stat2];
+                  }
+
+                  var oh = curr_data[0]["results"].split(" ");
+                  // console.log(oh);
+                  document.getElementById("result").innerHTML = "| ";
+                  for (var i = 0; i < oh.length; i++) {
+                    if (
+                      parseInt(oh[i].split("-")[0]) >
+                      parseInt(oh[i].split("-")[1])
+                    ) {
+                      // console.log("Player 1");
+                      document.getElementById("result").innerHTML +=
+                        '<span style="color:#00b100;">' +
+                        oh[i] +
+                        " </span><span>| </span>";
+                    } else {
+                      // console.log("Player 2");
+                      document.getElementById("result").innerHTML +=
+                        '<span style="color:#DC143C;">' +
+                        oh[i] +
+                        " </span><span>| </span>";
                     }
-
+                  }
                 });
 
               var gTime = d3
@@ -624,7 +620,7 @@
       <hr />
     </div>
 
-    <div class="row" style="margin-top: 10px;"></div>
+    <div class="row" style="margin-top: 0px; padding-top: 0px;"></div>
     <!-- <h2 id="tree">Match Tree</h2> -->
     <div class="hv-wrapper">
       <!-- Key component -->
@@ -728,8 +724,11 @@
         </div>
       </div>
     </div>
-
-    <hr />
+    <br />
+    <br />
+    <br />
+    <br />
+    <!-- <hr /> -->
 
     <script>
       var match_number = 0;
@@ -1009,22 +1008,29 @@
 
       $(function() {
         $("#btnTrigger").click();
+        $(window).scroll(function() {
+          if ($(window).scrollTop() + screen.height > $("body").height()) {
+            //do whatever
+            console.log("Reached End");
+            document.getElementById("myBtn").style.display = "none";
+          } else {
+            document.getElementById("myBtn").style.display = "block";
+          }
+        });
       });
 
-
-      function disp_modal_data()
-      {
-        var check = document.getElementById('more_info');
-        if(check.innerHTML.includes('Analysis'))
-        {
-          check.innerHTML = 'Instructions&nbsp;<span class="fa fa-info-circle"></span>';
-          document.getElementById('analysis').style.display = 'block';
-          document.getElementById('information').style.display = 'none';
-        }
-        else{
-          check.innerHTML = 'Analysis&nbsp;<span class="fa fa-line-chart"></span>'
-          document.getElementById('analysis').style.display = 'none';
-          document.getElementById('information').style.display = 'block';
+      function disp_modal_data() {
+        var check = document.getElementById("more_info");
+        if (check.innerHTML.includes("Analysis")) {
+          check.innerHTML =
+            'Instructions&nbsp;<span class="fa fa-info-circle"></span>';
+          document.getElementById("analysis").style.display = "block";
+          document.getElementById("information").style.display = "none";
+        } else {
+          check.innerHTML =
+            'Analysis&nbsp;<span class="fa fa-line-chart"></span>';
+          document.getElementById("analysis").style.display = "none";
+          document.getElementById("information").style.display = "block";
         }
       }
 
