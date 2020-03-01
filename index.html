@@ -919,24 +919,24 @@
 
         var x = document.getElementsByClassName("stats");
 
-for (var i = 0; i < x.length; i++) {
-  x[i].style.opacity = 0.3;
-}
+                    for (var i = 0; i < x.length; i++) {
+                      x[i].style.opacity = 0.3;
+                    }
 
-document.getElementById(curr_stat1).style.opacity = 1;
-document.getElementById(curr_stat2).style.opacity = 1;
-if (curr_stat1.includes("Serve")) {
-  // console.log('Serve');
-  document.getElementById("left_val_stat").innerHTML =
-    curr_data[match_number][curr_stat1] + " km/hr";
-  document.getElementById("right_val_stat").innerHTML =
-    curr_data[match_number][curr_stat2] + " km/hr";
-} else {
-  document.getElementById("left_val_stat").innerHTML =
-    curr_data[match_number][curr_stat1];
-  document.getElementById("right_val_stat").innerHTML =
-    curr_data[match_number][curr_stat2];
-}
+                    document.getElementById(curr_stat1).style.opacity = 1;
+                    document.getElementById(curr_stat2).style.opacity = 1;
+                    if (curr_stat1.includes("Serve")) {
+                      // console.log('Serve');
+                      document.getElementById("left_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat1] + " km/hr";
+                      document.getElementById("right_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat2] + " km/hr";
+                    } else {
+                      document.getElementById("left_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat1];
+                      document.getElementById("right_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat2];
+                    }
 
         // console.log(curr_data[id]);
 
