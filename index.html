@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AusOpen - Road To Glory</title>
+
+    <!-- Google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- D3.js -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"
+      charset="utf-8"
+    ></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="css/tree.css" />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://use.fontawesome.com/922eaae474.js"></script>
+
+    <!-- Data -->
+    <script type="text/javascript" src="data/data.js"></script>
+    <script src="js/radarChart.js"></script>
+    <script>
+      var curr_data = "",
+        curr_stat = "ace",
+        curr_stat1 = "ace1",
+        curr_stat2 = "ace2";
+    </script>
+  </head>
+  <body>
+    <div onclick="$('#btnTrigger').click();" id="myBtn1" title="Go Down"><a class="fa fa-info-circle fa-x" href="javascript:void(0)" onclick="$('#btnTrigger').click();" style="color: white;"></a></div>
+    <div onclick="window.scrollTo(0,document.body.scrollHeight);" id="myBtn" title="Go Down"><a class="fa fa-arrow-down fa-x" href="javascript:void(0)" onclick="window.scrollTo(0,document.body.scrollHeight);" style="color: white;"></a></div>
+    <!-- Button trigger modal -->
+    <button
+      type="button"
+      class="btn btn-primary"
+      style="display: none;"
+      data-toggle="modal"
+      id="btnTrigger"
+      data-target="#exampleModalCenter"
+    >
+      Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModalCenter"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">
+              <strong>AusOpen's</strong> - Road to Glory
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>From Quarter-Finals to Finals</p>
+            <div class="alert alert-success">
+              <strong>Features:</strong>
+              <br>
+              <ul>
+                <li>Select a Year from the timeline provided</li>
+                <li>Scroll down and select a match</li>
+                <li>Hovering over stats will give you its meausers</li>
+              </ul>
+            </div>
+            <div class="alert alert-warning">
+              <strong>Warning:</strong> Please reload the page if either data is missing or visualization is distorted.
+            </div>
+            <div class="alert alert-info">
+              <strong>Navigation:</strong>
+              <ul>
+                <li><span class="fa fa-arrow-down fa-x"></span> : Scrolls down and displays matches.</li>
+                <li><span class="fa fa-info-circle fa-x"></span> : Pops up this box again</li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding: 0px;">
+      <div class="row" style="margin-top: 10px;">
+        <div class="col-12">
+          <div id="Time_Slider">
+            <p
+              id="value-time"
+              style="text-align: center; padding-bottom: 0; margin-bottom: 0; font-size: larger; font-weight: bolder;"
+            >
+              Year
+            </p>
+            <div class="row">
+              <div class="col-sm-12" style="text-align: center;">
+                <div id="slider-time"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div style="float: right; text-align: right;">
+                  <h2 id="player1" style="color:#00b100; padding-bottom: 25px;">
+                    Roger Federer
+                  </h2>
+                </div>
+              </div>
+              <div
+                class="col-sm-4"
+                style="text-align: center; border-bottom: 1px solid #d1c8c4;"
+              >
+                <!-- <p id="value-time"></p> -->
+                <p id="round" style="margin-top: -10px;">(Final)</p>
+                <p id="result" style="margin-top: -10px;">7-6(3) 6-4 6-2</p>
+              </div>
+              <div class="col-sm-4">
+                <div style="">
+                  <h2 id="player2" style="color:#DC143C;">Marat Safin</h2>
+                </div>
+              </div>
+            </div>
+            <br />
+
+            <script>
+              // Year Slider
+              var dataTime = d3.range(0, 11).map(function(d) {
+                return new Date(2004 + d, 11, 3);
+              });
+
+              var curr_val = document.getElementById("value-time").innerHTML;
+
+              var sliderTime = d3
+                .sliderBottom()
+                .min(d3.min(dataTime))
+                .max(d3.max(dataTime))
+                .step(1000 * 60 * 60 * 24 * 365)
+                .width(885)
+                .tickFormat(d3.timeFormat("%Y"))
+                .tickValues(dataTime)
+                .default(new Date(2004, 10, 3))
+                .on("onchange", val => {
+                  var data = [
+                    [
+                      //Second Player
+                      {
+                        axis: "First Serve",
+                        value:
+                          parseInt(curr_data[0]["firstServe2"].slice(0, -1)) /
+                          100
+                      },
+                      {
+                        axis: "First Point",
+                        value:
+                          parseInt(
+                            curr_data[0]["firstPointWon2"].slice(0, -1)
+                          ) / 100
+                      },
+                      {
+                        axis: "Second Point",
+                        value:
+                          parseInt(curr_data[0]["secPointWon2"].slice(0, -1)) /
+                          100
+                      },
+                      {
+                        axis: "Net",
+                        value: parseInt(curr_data[0]["net2"].slice(0, -1)) / 100
+                      },
+                      {
+                        axis: "Break",
+                        value:
+                          parseInt(curr_data[0]["break2"].slice(0, -1)) / 100
+                      },
+                      {
+                        axis: "Return",
+                        value:
+                          parseInt(curr_data[0]["return2"].slice(0, -1)) / 100
+                      }
+                    ],
+                    [
+                      //First Player
+                      {
+                        axis: "First Serve",
+                        value:
+                          parseInt(curr_data[0]["firstServe1"].slice(0, -1)) /
+                          100
+                      },
+                      {
+                        axis: "First Point",
+                        value:
+                          parseInt(
+                            curr_data[0]["firstPointWon1"].slice(0, -1)
+                          ) / 100
+                      },
+                      {
+                        axis: "Second Point",
+                        value:
+                          parseInt(curr_data[0]["secPointWon1"].slice(0, -1)) /
+                          100
+                      },
+                      {
+                        axis: "Net",
+                        value: parseInt(curr_data[0]["net1"].slice(0, -1)) / 100
+                      },
+                      {
+                        axis: "Break",
+                        value:
+                          parseInt(curr_data[0]["break1"].slice(0, -1)) / 100
+                      },
+                      {
+                        axis: "Return",
+                        value:
+                          parseInt(curr_data[0]["return1"].slice(0, -1)) / 100
+                      }
+                    ]
+                  ];
+                  RadarChart(".radarChart", data, radarChartOptions);
+                  d3.select("p#value-time").text(d3.timeFormat("%Y")(val));
+                  if (
+                    document.getElementById("value-time").innerHTML != curr_val
+                  ) {
+                    curr_val = document.getElementById("value-time").innerHTML;
+
+                    curr_data = data_full[curr_val - 2004];
+                    document.getElementById("round").innerHTML =
+                      curr_data[0]["round"];
+                    document.getElementById("result").innerHTML =
+                      curr_data[0]["results"];
+                    document.getElementById("player1").innerHTML =
+                      curr_data[0]["player1"];
+                    document.getElementById("player2").innerHTML =
+                      curr_data[0]["player2"];
+                    document.getElementsByClassName(0)[0].innerHTML =
+                      curr_data[0]["player1"] +
+                      '<br><span style="font-weight: normal;">' +
+                      curr_data[0]["round"] +
+                      "<br>Winner</span>";
+
+                    for (var k = 0; k < curr_data.length; k++) {
+                      if (2 * k + 2 > 6) {
+                        document.getElementsByClassName(
+                          2 * k + 1
+                        )[0].innerHTML = curr_data[k]["player1"];
+                        document.getElementsByClassName(
+                          2 * k + 2
+                        )[0].innerHTML = curr_data[k]["player2"];
+                      } else {
+                        document.getElementsByClassName(
+                          2 * k + 1
+                        )[0].innerHTML =
+                          curr_data[k]["player1"] +
+                          '<br><span style="font-weight: normal; font-size: 13px">' +
+                          curr_data[2 * k + 1]["round"] +
+                          "-Final Winner </span>";
+                        document.getElementsByClassName(
+                          2 * k + 2
+                        )[0].innerHTML =
+                          curr_data[k]["player2"] +
+                          '<br><span style="font-weight: normal; font-size: 13px">' +
+                          curr_data[2 * k + 2]["round"] +
+                          "-Final Winner </span>";
+                      }
+                    }
+                    // console.log(document.getElementById(curr_stat1).style);
+                    var x = document.getElementsByClassName("stats");
+
+                    for (var i = 0; i < x.length; i++) {
+                      x[i].style.opacity = 0.3;
+                    }
+
+                    document.getElementById(curr_stat1).style.opacity = 1;
+                    document.getElementById(curr_stat2).style.opacity = 1;
+                    if (curr_stat1.includes("Serve")) {
+                      // console.log('Serve');
+                      document.getElementById("left_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat1] + " km/hr";
+                      document.getElementById("right_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat2] + " km/hr";
+                    } else {
+                      document.getElementById("left_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat1];
+                      document.getElementById("right_val_stat").innerHTML =
+                        curr_data[match_number][curr_stat2];
+                    }
+
+                    var oh = curr_data[0]["results"].split(" ");
+                    // console.log(oh);
+                    document.getElementById("result").innerHTML = "| ";
+                    for (var i = 0; i < oh.length; i++) {
+                      if (
+                        parseInt(oh[i].split("-")[0]) >
+                        parseInt(oh[i].split("-")[1])
+                      ) {
+                        // console.log("Player 1");
+                        document.getElementById("result").innerHTML +=
+                          '<span style="color:#00b100;">' +
+                          oh[i] +
+                          " </span><span>| </span>";
+                      } else {
+                        // console.log("Player 2");
+                        document.getElementById("result").innerHTML +=
+                          '<span style="color:#DC143C;">' +
+                          oh[i] +
+                          " </span><span>| </span>";
+                      }
+                    }
+                  }
+                });
+
+              var gTime = d3
+                .select("div#slider-time")
+                .append("svg")
+                .attr("width", 950)
+                .attr("height", 100)
+                .append("g")
+                .attr("transform", "translate(30,30)");
+
+              gTime.call(sliderTime);
+
+              d3.select("p#value-time").text(
+                d3.timeFormat("%Y")(sliderTime.value())
+              );
+              curr_val = document.getElementById("value-time").innerHTML;
+
+              curr_data = data_full[curr_val - 2004];
+
+              //Custom Changes
+              var hand = document.getElementsByClassName("handle");
+              hand[0].style["outline"] = "none";
+              hand[0].style["fill"] = "#3C638E";
+
+              var slide_track = document.getElementsByClassName("track-inset");
+              slide_track[0].style["strokeWidth"] = 6;
+              slide_track[0].style["stroke"] = "#d8d8d8";
+
+              var point = "";
+
+              $(function() {
+                document.getElementsByClassName(0)[0].innerHTML =
+                      curr_data[0]["player1"] +
+                      '<br><span style="font-weight: normal;">' +
+                      curr_data[0]["round"] +
+                      "<br>Winner</span>";
+
+                for (var k = 0; k < curr_data.length; k++) {
+                  if (2 * k + 2 > 6) {
+                    document.getElementsByClassName(2 * k + 1)[0].innerHTML =
+                      curr_data[k]["player1"];
+                    document.getElementsByClassName(2 * k + 2)[0].innerHTML =
+                      curr_data[k]["player2"];
+                  } else {
+                    // console.log(k,curr_data[k],curr_data);
+                    document.getElementsByClassName(2 * k + 1)[0].innerHTML =
+                      curr_data[k]["player1"] +
+                      '<br><span style="font-weight: normal; font-size: 13px">' +
+                      curr_data[2 * k + 1]["round"] +
+                      "-Final Winner </span>";
+                    document.getElementsByClassName(2 * k + 2)[0].innerHTML =
+                      curr_data[k]["player2"] +
+                      '<br><span style="font-weight: normal; font-size: 13px">' +
+                      curr_data[2 * k + 2]["round"] +
+                      "-Final Winner </span>";
+                  }
+                }
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Just the Names -->
+      <div class="row" style="margin-top: -25px;">
+        <div class="col-3">
+          <div style="text-align: right; float: right;" id="">
+            <!-- <h2 id="player1" style="color:#00b100;">Roger Federer</h2> -->
+            <br />
+            <!-- Stats -->
+
+            <div class="row" style="float:right">
+              <p class="stats left" id="ace1"><strong>Total Ace</strong></p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="double1">
+                <strong>Total Double</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="fastServe1">
+                <strong>Fastest Serve</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="avgFirstServe1">
+                <strong>Avg. 1st Serve</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="avgSecServe1">
+                <strong>Avg. 2nd Serve</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="winner1">
+                <strong>Winner (Points)</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="error1">
+                <strong>Error (Points)</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:right">
+              <p class="stats left" id="total1">
+                <strong>Total (Points)</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+          </div>
+          <div class="row" style="float:right">
+            <hr />
+            <p><span id="left_val_stat"></span></p>
+            <br />
+          </div>
+          <br />
+        </div>
+        <div class="col-6">
+          <div class="row" style="text-align: center;">
+            <div class="radarChart col-12"></div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div style="text-align: right; float:left" id="">
+            <!-- <h2 id="player1" style="color:#00b100;">Roger Federer</h2> -->
+            <br />
+            <!-- Stats -->
+
+            <div class="row" style="float:left">
+              <p class="stats right" id="ace2"><strong>Total Ace</strong></p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="double2">
+                <strong>Total Double</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="fastServe2">
+                <strong>Fastest Serve</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="avgFirstServe2">
+                <strong>Avg. 1st Serve</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="avgSecServe2">
+                <strong>Avg. 2nd Serve</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="winner2">
+                <strong>Winner (Points)</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="error2">
+                <strong>Error (Points)</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+            <div class="row" style="float:left">
+              <p class="stats right" id="total2">
+                <strong>Total (Points)</strong>
+              </p>
+              <br />
+            </div>
+            <br />
+          </div>
+          <div class="row" style="float:left">
+            <hr />
+            <p><span id="right_val_stat"></span></p>
+            <br />
+          </div>
+          <br />
+        </div>
+      </div>
+
+      <hr />
+    </div>
+
+
+    <div class="row" style="margin-top: 10px;"></div>
+    <!-- <h2 id="tree">Match Tree</h2> -->
+    <div class="hv-wrapper">
+      <!-- Key component -->
+      <div class="hv-item">
+        <div class="hv-item-parent">
+          <p id="tree" class="0 match">Winner</p>
+        </div>
+
+        <div class="hv-item-children">
+          <div class="hv-item-child">
+            <div class="hv-item">
+              <div class="hv-item-parent">
+                <p id="tree" class="1 match">Finalist 1</p>
+              </div>
+
+              <div class="hv-item-children">
+                <div class="hv-item-child">
+                  <div class="hv-item">
+                    <div class="hv-item-parent">
+                      <p id="tree" class="3 match">Semifinalist 1.1</p>
+                    </div>
+
+                    <div class="hv-item-children">
+                      <div class="hv-item-child">
+                        <p id="tree" class="7">Child 1</p>
+                      </div>
+
+                      <div class="hv-item-child">
+                        <p id="tree" class="8">Child 2</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hv-item-child">
+                  <div class="hv-item">
+                    <div class="hv-item-parent">
+                      <p id="tree" class="4 match">Semifinalist 1.2</p>
+                    </div>
+
+                    <div class="hv-item-children">
+                      <div class="hv-item-child">
+                        <p id="tree" class="9">Child 1</p>
+                      </div>
+
+                      <div class="hv-item-child">
+                        <p id="tree" class="10">Child 2</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hv-item-child">
+            <div class="hv-item">
+              <div class="hv-item-parent">
+                <p id="tree" class="2 match">Finalist 2</p>
+              </div>
+
+              <div class="hv-item-children">
+                <div class="hv-item-child">
+                  <div class="hv-item">
+                    <div class="hv-item-parent">
+                      <p id="tree" class="5 match">Semifinalist 2.1</p>
+                    </div>
+
+                    <div class="hv-item-children">
+                      <div class="hv-item-child">
+                        <p id="tree" class="11">Child 1</p>
+                      </div>
+
+                      <div class="hv-item-child">
+                        <p id="tree" class="12">Child 2</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hv-item-child">
+                  <div class="hv-item">
+                    <div class="hv-item-parent">
+                      <p id="tree" class="6 match">Semifinalist 2.2</p>
+                    </div>
+
+                    <div class="hv-item-children">
+                      <div class="hv-item-child">
+                        <p id="tree" class="13">Child 1</p>
+                      </div>
+
+                      <div class="hv-item-child">
+                        <p id="tree" class="14">Child 2</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    
+    <script>
+      var match_number = 0;
+
+      $(".match").click(function() {
+        match_number = $(this)
+          .attr("class")
+          .split(" ")[0];
+
+        update_viz(match_number);
+      });
+
+      $(".stats").hover(function() {
+        var class_names = $(this)
+          .attr("class")
+          .split(" ");
+
+        var id_name = $(this)
+          .attr("id")
+          .split(" ");
+
+        var x = document.getElementsByClassName("stats");
+
+        for (var i = 0; i < x.length; i++) {
+          x[i].style.opacity = 0.3;
+        }
+
+        var curr_stat = id_name[0].slice(0, -1);
+
+        var curr_stat1 = curr_stat + "1",
+          curr_stat2 = curr_stat + "2";
+
+        document.getElementById(curr_stat + "1").style.opacity = 1;
+
+        document.getElementById(curr_stat + "2").style.opacity = 1;
+        // console.log(curr_data[match_number][curr_stat1]);
+        // console.log(curr_data[match_number][curr_stat2]);
+        // console.log(curr_data[match_number],curr_stat1,curr_stat2);
+
+        if (curr_stat1.includes("Serve")) {
+          // console.log('Serve');
+          document.getElementById("left_val_stat").innerHTML =
+            curr_data[match_number][curr_stat1] + " km/hr";
+          document.getElementById("right_val_stat").innerHTML =
+            curr_data[match_number][curr_stat2] + " km/hr";
+        } else {
+          document.getElementById("left_val_stat").innerHTML =
+            curr_data[match_number][curr_stat1];
+          document.getElementById("right_val_stat").innerHTML =
+            curr_data[match_number][curr_stat2];
+        }
+      });
+
+      var margin = { top: 100, right: 100, bottom: 100, left: 100 },
+        width =
+          Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+        height = Math.min(
+          width,
+          window.innerHeight - margin.top - margin.bottom - 20
+        );
+
+      var data = [
+        [
+          //Second Player
+          {
+            axis: "First Serve",
+            value: parseInt(curr_data[0]["firstServe2"].slice(0, -1)) / 100
+          },
+          {
+            axis: "First Point",
+            value: parseInt(curr_data[0]["firstPointWon2"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Second Point",
+            value: parseInt(curr_data[0]["secPointWon2"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Net",
+            value: parseInt(curr_data[0]["net2"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Break",
+            value: parseInt(curr_data[0]["break2"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Return",
+            value: parseInt(curr_data[0]["return2"].slice(0, -1)) / 100
+          }
+        ],
+        [
+          //First Player
+          {
+            axis: "First Serve",
+            value: parseInt(curr_data[0]["firstServe1"].slice(0, -1)) / 100
+          },
+          {
+            axis: "First Point",
+            value: parseInt(curr_data[0]["firstPointWon1"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Second Point",
+            value: parseInt(curr_data[0]["secPointWon1"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Net",
+            value: parseInt(curr_data[0]["net1"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Break",
+            value: parseInt(curr_data[0]["break1"].slice(0, -1)) / 100
+          },
+          {
+            axis: "Return",
+            value: parseInt(curr_data[0]["return1"].slice(0, -1)) / 100
+          }
+        ]
+      ];
+
+      var color = d3.scale.ordinal().range(["#CC333F", "#00B100", "#00A0B0"]);
+
+      var radarChartOptions = {
+        w: width * 0.7,
+        h: height * 0.7,
+        margin: margin,
+        maxValue: 1,
+        levels: 5,
+        roundStrokes: true,
+        color: color
+      };
+
+      //Call function to draw the Radar chart
+      RadarChart(".radarChart", data, radarChartOptions);
+      document.getElementById(curr_stat1).style.opacity = 1;
+      document.getElementById(curr_stat2).style.opacity = 1;
+
+      document.getElementById("left_val_stat").innerHTML =
+        curr_data[match_number][curr_stat1];
+      document.getElementById("right_val_stat").innerHTML =
+        curr_data[match_number][curr_stat2];
+
+      var oh = curr_data[0]["results"].split(" ");
+      // console.log(oh);
+      document.getElementById("result").innerHTML = "| ";
+      for (var i = 0; i < oh.length; i++) {
+        if (parseInt(oh[i].split("-")[0]) > parseInt(oh[i].split("-")[1])) {
+          // console.log("Player 1");
+          document.getElementById("result").innerHTML +=
+            '<span style="color:#00b100;">' + oh[i] + " </span><span>| </span>";
+        } else {
+          // console.log("Player 2");
+          document.getElementById("result").innerHTML +=
+            '<span style="color:#DC143C;">' + oh[i] + " </span><span>| </span>";
+        }
+      }
+
+      function update_viz(id) {
+        // console.log(id,curr_data[id]);
+
+        document.getElementById("ace1").value = curr_data[id]["ace1"];
+        document.getElementById("ace2").value = curr_data[id]["ace2"];
+
+        document.getElementById("double1").value = curr_data[id]["double1"];
+        document.getElementById("double2").value = curr_data[id]["double2"];
+
+        document.getElementById("player1").innerHTML = curr_data[id]["player1"];
+        document.getElementById("player2").innerHTML = curr_data[id]["player2"];
+        document.getElementById("round").innerHTML = curr_data[id]["round"];
+        document.getElementById("result").innerHTML = curr_data[id]["results"];
+
+        // console.log(curr_data[id]["results"].split(' '));
+        var oh = curr_data[id]["results"].split(" ");
+        // console.log(oh);
+        document.getElementById("result").innerHTML = "| ";
+        for (var i = 0; i < oh.length; i++) {
+          if (parseInt(oh[i].split("-")[0]) > parseInt(oh[i].split("-")[1])) {
+            // console.log("Player 1");
+            document.getElementById("result").innerHTML +=
+              '<span style="color:#00b100;">' +
+              oh[i] +
+              " </span><span>| </span>";
+          } else {
+            // console.log("Player 2");
+            document.getElementById("result").innerHTML +=
+              '<span style="color:#DC143C;">' +
+              oh[i] +
+              " </span><span>| </span>";
+          }
+        }
+
+        data = [
+          [
+            //Second Player
+            {
+              axis: "First Serve",
+              value: parseInt(curr_data[id]["firstServe2"].slice(0, -1)) / 100
+            },
+            {
+              axis: "First Point",
+              value:
+                parseInt(curr_data[id]["firstPointWon2"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Second Point",
+              value: parseInt(curr_data[id]["secPointWon2"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Net",
+              value: parseInt(curr_data[id]["net2"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Break",
+              value: parseInt(curr_data[id]["break2"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Return",
+              value: parseInt(curr_data[id]["return2"].slice(0, -1)) / 100
+            }
+          ],
+          [
+            //First Player
+            {
+              axis: "First Serve",
+              value: parseInt(curr_data[id]["firstServe1"].slice(0, -1)) / 100
+            },
+            {
+              axis: "First Point",
+              value:
+                parseInt(curr_data[id]["firstPointWon1"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Second Point",
+              value: parseInt(curr_data[id]["secPointWon1"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Net",
+              value: parseInt(curr_data[id]["net1"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Break",
+              value: parseInt(curr_data[id]["break1"].slice(0, -1)) / 100
+            },
+            {
+              axis: "Return",
+              value: parseInt(curr_data[id]["return1"].slice(0, -1)) / 100
+            }
+          ]
+        ];
+        RadarChart(".radarChart", data, radarChartOptions);
+
+        // console.log(curr_data[id]);
+
+        window.scrollTo(0, 0);
+
+        // console.log(curr_data[id]);
+      }
+
+      $(function() {
+        $("#btnTrigger").click();
+        $('body').scroll(function(){
+    //scrollTop refers to the top of the scroll position, which will be scrollHeight - offsetHeight
+    
+      console.log("Top of the bottom reached!", this.scrollHeight);
+    
+  });
+      });
+
+      //Get the button
+var mybutton = document.getElementById("myBtn");
+mybutton.style.display = "block";
+var mybutton1 = document.getElementById("myBtn1");
+mybutton1.style.display = "block";
+
+
+// When the user clicks on the button, scroll to the top of the document
+function downFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+
+    </script>
+  </body>
+</html>
