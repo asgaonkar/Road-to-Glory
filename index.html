@@ -55,8 +55,26 @@
     </script>
   </head>
   <body>
-    <div onclick="$('#btnTrigger').click();" id="myBtn1" title="Go Down"><a class="fa fa-info-circle fa-x" href="javascript:void(0)" onclick="$('#btnTrigger').click();" style="color: white;"></a></div>
-    <div onclick="window.scrollTo(0,document.body.scrollHeight);" id="myBtn" title="Go Down"><a class="fa fa-arrow-down fa-x" href="javascript:void(0)" onclick="window.scrollTo(0,document.body.scrollHeight);" style="color: white;"></a></div>
+    <div onclick="$('#btnTrigger').click();" id="myBtn1" title="Go Down">
+      <a
+        class="fa fa-info-circle fa-x"
+        href="javascript:void(0)"
+        onclick="$('#btnTrigger').click();"
+        style="color: white;"
+      ></a>
+    </div>
+    <div
+      onclick="window.scrollTo(0,document.body.scrollHeight);"
+      id="myBtn"
+      title="Go Down"
+    >
+      <a
+        class="fa fa-arrow-down fa-x"
+        href="javascript:void(0)"
+        onclick="window.scrollTo(0,document.body.scrollHeight);"
+        style="color: white;"
+      ></a>
+    </div>
     <!-- Button trigger modal -->
     <button
       type="button"
@@ -94,28 +112,65 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>From Quarter-Finals to Finals</p>
-            <div class="alert alert-success">
-              <strong>Features:</strong>
-              <br>
-              <ul>
-                <li>Select a Year from the timeline provided</li>
-                <li>Scroll down and select a match</li>
-                <li>Hovering over stats will give you its meausers</li>
-              </ul>
+            <div class="information" style="display: none;">
+              <p>From Quarter-Finals to Finals</p>
+              <div class="alert alert-success">
+                <strong>Features:</strong>
+                <br />
+                <ul>
+                  <li>Select a Year from the timeline provided</li>
+                  <li>Scroll down and select a match</li>
+                  <li>Hovering over stats will give you its meausers</li>
+                </ul>
+              </div>
+              <div class="alert alert-warning">
+                <strong>Warning:</strong> Please reload the page if either data
+                is missing or visualization is distorted.
+              </div>
+              <div class="alert alert-info">
+                <strong>Navigation:</strong>
+                <ul>
+                  <li>
+                    <span class="fa fa-arrow-down fa-x"></span> : Scrolls down
+                    and displays matches.
+                  </li>
+                  <li>
+                    <span class="fa fa-info-circle fa-x"></span> : Pops up this
+                    box again
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="alert alert-warning">
-              <strong>Warning:</strong> Please reload the page if either data is missing or visualization is distorted.
-            </div>
-            <div class="alert alert-info">
-              <strong>Navigation:</strong>
-              <ul>
-                <li><span class="fa fa-arrow-down fa-x"></span> : Scrolls down and displays matches.</li>
-                <li><span class="fa fa-info-circle fa-x"></span> : Pops up this box again</li>
-              </ul>
+            <div class="analysis" style="display: block;">
+              <p>From Quarter-Finals to Finals</p>
+              <div class="alert alert-success">
+                The <strong>Most Agressive</strong> players
+                <br />
+                <ul>
+                  <li>2004: Roger Federer</li>
+                  <li>2005: ***</li>
+                  <li>2006: Roger Federer</li>
+                  <li>2007: Roger Federer</li>
+                  <li>2008: Jo-Wilfried Tsonga</li>
+                  <li>2009: Roger Federer</li>
+                  <li>2010: Roger Federer</li>
+                  <li>2011: Roger Federer</li>
+                  <li>2012: Roger Federer</li>
+                  <li>2013: Roger Federer</li>
+                  <li>2014: Roger Federer</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              style="background-color: #FFBF00; border-color: #FFD300;"
+            >
+              Analysis&nbsp;<span class="fa fa-line-chart"></span>
+            </button>
+
             <button
               type="button"
               class="btn btn-secondary"
@@ -267,7 +322,11 @@
                     curr_val = document.getElementById("value-time").innerHTML;
 
                     curr_data = data_full[curr_val - 2004];
-                    document.getElementById("round").innerHTML =
+            
+
+
+                  }
+                  document.getElementById("round").innerHTML =
                       curr_data[0]["round"];
                     document.getElementById("result").innerHTML =
                       curr_data[0]["results"];
@@ -349,7 +408,7 @@
                           " </span><span>| </span>";
                       }
                     }
-                  }
+
                 });
 
               var gTime = d3
@@ -382,10 +441,10 @@
 
               $(function() {
                 document.getElementsByClassName(0)[0].innerHTML =
-                      curr_data[0]["player1"] +
-                      '<br><span style="font-weight: normal;">' +
-                      curr_data[0]["round"] +
-                      "<br>Winner</span>";
+                  curr_data[0]["player1"] +
+                  '<br><span style="font-weight: normal;">' +
+                  curr_data[0]["round"] +
+                  "<br>Winner</span>";
 
                 for (var k = 0; k < curr_data.length; k++) {
                   if (2 * k + 2 > 6) {
@@ -561,7 +620,6 @@
       <hr />
     </div>
 
-
     <div class="row" style="margin-top: 10px;"></div>
     <!-- <h2 id="tree">Match Tree</h2> -->
     <div class="hv-wrapper">
@@ -668,7 +726,7 @@
     </div>
 
     <hr />
-    
+
     <script>
       var match_number = 0;
 
@@ -919,24 +977,24 @@
 
         var x = document.getElementsByClassName("stats");
 
-                    for (var i = 0; i < x.length; i++) {
-                      x[i].style.opacity = 0.3;
-                    }
+        for (var i = 0; i < x.length; i++) {
+          x[i].style.opacity = 0.3;
+        }
 
-                    document.getElementById(curr_stat1).style.opacity = 1;
-                    document.getElementById(curr_stat2).style.opacity = 1;
-                    if (curr_stat1.includes("Serve")) {
-                      // console.log('Serve');
-                      document.getElementById("left_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat1] + " km/hr";
-                      document.getElementById("right_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat2] + " km/hr";
-                    } else {
-                      document.getElementById("left_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat1];
-                      document.getElementById("right_val_stat").innerHTML =
-                        curr_data[match_number][curr_stat2];
-                    }
+        document.getElementById(curr_stat1).style.opacity = 1;
+        document.getElementById(curr_stat2).style.opacity = 1;
+        if (curr_stat1.includes("Serve")) {
+          // console.log('Serve');
+          document.getElementById("left_val_stat").innerHTML =
+            curr_data[match_number][curr_stat1] + " km/hr";
+          document.getElementById("right_val_stat").innerHTML =
+            curr_data[match_number][curr_stat2] + " km/hr";
+        } else {
+          document.getElementById("left_val_stat").innerHTML =
+            curr_data[match_number][curr_stat1];
+          document.getElementById("right_val_stat").innerHTML =
+            curr_data[match_number][curr_stat2];
+        }
 
         // console.log(curr_data[id]);
 
@@ -947,27 +1005,24 @@
 
       $(function() {
         $("#btnTrigger").click();
-        $('body').scroll(function(){
-    //scrollTop refers to the top of the scroll position, which will be scrollHeight - offsetHeight
-    
-      console.log("Top of the bottom reached!", this.scrollHeight);
-    
-  });
+        $("body").scroll(function() {
+          //scrollTop refers to the top of the scroll position, which will be scrollHeight - offsetHeight
+
+          console.log("Top of the bottom reached!", this.scrollHeight);
+        });
       });
 
       //Get the button
-var mybutton = document.getElementById("myBtn");
-mybutton.style.display = "block";
-var mybutton1 = document.getElementById("myBtn1");
-mybutton1.style.display = "block";
+      var mybutton = document.getElementById("myBtn");
+      mybutton.style.display = "block";
+      var mybutton1 = document.getElementById("myBtn1");
+      mybutton1.style.display = "block";
 
-
-// When the user clicks on the button, scroll to the top of the document
-function downFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
-
+      // When the user clicks on the button, scroll to the top of the document
+      function downFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
     </script>
   </body>
 </html>
