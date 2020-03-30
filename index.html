@@ -53,6 +53,7 @@
         curr_stat1 = "ace1",
         curr_stat2 = "ace2";
     </script>
+    <style></style>
   </head>
   <body>
     <div onclick="$('#btnTrigger').click();" id="myBtn1" title="Instruction">
@@ -172,6 +173,15 @@
           </div>
           <div class="modal-footer">
             <button
+              onclick="color_blind()"
+              type="button"
+              class="btn btn-secondary"
+              id="color_blind"
+              style="background-color: #2776f2; border-color: #2776f2;"
+            >
+              Color-Blind&nbsp;<span class="fa fa-eye"></span>
+            </button>
+            <button
               onclick="disp_modal_data()"
               type="button"
               class="btn btn-secondary"
@@ -211,7 +221,12 @@
             <div class="row">
               <div class="col-sm-4">
                 <div style="float: right; text-align: right;">
-                  <h2 id="player1" style="color:#00b100; padding-bottom: 25px;">
+                  <h2
+                    id="player1"
+                    style="color:#4dac26; padding-bottom: 25px;"
+                    onmouseover="player_mouseover(1)"
+                    onmouseout="player_mouseout(1)"
+                  >
                     Roger Federer
                   </h2>
                 </div>
@@ -226,7 +241,14 @@
               </div>
               <div class="col-sm-4">
                 <div style="">
-                  <h2 id="player2" style="color:#DC143C;">Marat Safin</h2>
+                  <h2
+                    id="player2"
+                    style="color:#f20000;"
+                    onmouseover="player_mouseover(0)"
+                    onmouseout="player_mouseout(0)"
+                  >
+                    Marat Safin
+                  </h2>
                 </div>
               </div>
             </div>
@@ -409,6 +431,11 @@
                         " </span><span>| </span>";
                     }
                   }
+
+                  $(".match").removeClass("selected");
+                  document
+                    .getElementsByClassName("0")[0]
+                    .classList.add("selected");
                 });
 
               var gTime = d3
@@ -618,9 +645,14 @@
       </div>
 
       <hr />
+      <div style="text-align: center;">
+        <h2>
+          <span class="fa fa-trophy" style="font-size: larger;"></span>
+        </h2>
+      </div>
     </div>
 
-    <div class="row" style="margin-top: 0px; padding-top: 0px;"></div>
+    <!-- <div class="row" style="margin-top: 0px; padding-top: 0px;"></div> -->
     <!-- <h2 id="tree">Match Tree</h2> -->
     <div class="hv-wrapper">
       <!-- Key component -->
@@ -737,7 +769,8 @@
         match_number = $(this)
           .attr("class")
           .split(" ")[0];
-
+        $(".match").removeClass("selected");
+        $(this).addClass("selected");
         update_viz(match_number);
       });
 
@@ -1011,13 +1044,49 @@
         $(window).scroll(function() {
           if ($(window).scrollTop() + screen.height > $("body").height()) {
             //do whatever
-            console.log("Reached End");
+            // console.log("Reached End");
             document.getElementById("myBtn").style.display = "none";
           } else {
             document.getElementById("myBtn").style.display = "block";
           }
         });
+        document.getElementsByClassName("0")[0].classList.add("selected");
       });
+
+      function color_blind() {
+        var color_blind = document.getElementById("color_blind");
+        if (color_blind.innerHTML.includes("Blind")) {
+          color_blind.innerHTML =
+            'Normal-Vision&nbsp;<span class="fa fa-eye"></span>';
+          document.getElementById("player2").style.color = "#8f7e1e";
+          document.getElementById("player1").style.color = "#f8dc00";
+
+          document.getElementsByClassName("radarArea")[1].style.fill =
+            "#f8dc00";
+          document.getElementsByClassName("radarStroke")[1].style.stroke =
+            "#f8dc00";
+
+          document.getElementsByClassName("radarArea")[0].style.fill =
+            "#8f7e1e";
+          document.getElementsByClassName("radarStroke")[0].style.stroke =
+            "#8f7e1e";
+        } else {
+          color_blind.innerHTML =
+            'Color-Blind&nbsp;<span class="fa fa-eye"></span>';
+          document.getElementById("player2").style.color = "#f20000";
+          document.getElementById("player1").style.color = "#4dac26";
+
+          document.getElementsByClassName("radarArea")[0].style.fill =
+            "#cc333f";
+          document.getElementsByClassName("radarStroke")[0].style.stroke =
+            "#cc333f";
+
+          document.getElementsByClassName("radarArea")[1].style.fill =
+            "#4dac26";
+          document.getElementsByClassName("radarStroke")[1].style.stroke =
+            "#4dac26";
+        }
+      }
 
       function disp_modal_data() {
         var check = document.getElementById("more_info");
@@ -1044,6 +1113,22 @@
       function downFunction() {
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
+      }
+
+      function player_mouseover(id) {
+        document.getElementsByClassName("radarArea")[0].style.fillOpacity =
+          "0.1";
+        document.getElementsByClassName("radarArea")[1].style.fillOpacity =
+          "0.1";
+        document.getElementsByClassName("radarArea")[id].style.fillOpacity =
+          "0.7";
+      }
+
+      function player_mouseout(id) {
+        document.getElementsByClassName("radarArea")[0].style.fillOpacity =
+          "0.35";
+        document.getElementsByClassName("radarArea")[1].style.fillOpacity =
+          "0.35";
       }
     </script>
   </body>
